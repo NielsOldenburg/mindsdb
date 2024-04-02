@@ -53,11 +53,19 @@ class ConfluenceHandler(APIHandler):
         """
         if self.is_connected is True:
             return self.connection
-        conf = Confluence(
-            url=self.connection_data.get('url'),
-            username=self.connection_data.get('username'),
-            password=self.connection_data.get('password'),
-        )
+        
+        if self.connection_data.get('token') is not None:
+            conf = Confluence(
+                url=self.connection_data.get('url'),
+                token=self.connection_data.get('token')
+            )
+        else:
+            conf = Confluence(
+                url=self.connection_data.get('url'),
+                username=self.connection_data.get('username'),
+                password=self.connection_data.get('password')
+            )
+
         self.connection = conf
         self.is_connected = True
         return self.connection
