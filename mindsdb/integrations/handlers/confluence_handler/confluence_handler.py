@@ -70,6 +70,22 @@ class ConfluenceHandler(APIHandler):
         self.is_connected = True
         return self.connection
 
+    def GenerateRequestHeader(self, **kwargs):
+        """
+        Provides a standard header
+        """
+        class _request_header():
+            headers = {
+                "Content-Type": "application/json"
+                }
+
+        if self.connection_data.get('token'):
+            _request_header.headers.update({ "Authorization": f"Bearer {self.connection_data.get('token')}" })
+        else:
+            HTTPBasicAuth(self.connection_data.get('username'), self.connection_data.get('password'))(_request_header)
+
+        return _request_header.headers
+
     def check_connection(self) -> StatusResponse:
         """Check connection to the handler.
         Returns
